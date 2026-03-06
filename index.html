@@ -3,43 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Air Leak Report</title>
+<title>Energy News</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <style>
 
 body{
 margin:0;
-font-family:Arial, sans-serif;
-background:#f5f5f5;
 text-align:center;
+background:#f2f2f2;
+font-family:Arial;
 }
 
-.container{
+canvas{
+width:100%;
 max-width:900px;
 margin:auto;
-padding:20px;
-}
-
-.pdf{
-width:100%;
-height:80vh;
-border:none;
+display:block;
 }
 
 .btn{
-display:inline-block;
-margin-top:20px;
-padding:15px 35px;
-font-size:20px;
+position:fixed;
+bottom:30px;
+left:50%;
+transform:translateX(-50%);
 background:#3b5bfd;
 color:white;
-border-radius:10px;
+padding:16px 30px;
+font-size:20px;
+border-radius:12px;
 text-decoration:none;
 font-weight:bold;
-}
-
-.btn:hover{
-background:#2a44c7;
+box-shadow:0 5px 15px rgba(0,0,0,0.3);
 }
 
 </style>
@@ -47,18 +43,39 @@ background:#2a44c7;
 
 <body>
 
-<div class="container">
-
-<iframe src="Energy_New_001.pdf" width="100%" height="800px"></iframe>
-
-<br>
+<canvas id="pdf-canvas"></canvas>
 
 <a href="https://forms.gle/t7cpEgH6JDMxS3s3A" target="_blank" class="btn">
-แบบรายงานลมรั่ว / Air Leak Report Form
+Report Air Leak
 </a>
 
-</div>
+<script>
+
+const url = "Energy_New_001.pdf";
+
+pdfjsLib.getDocument(url).promise.then(function(pdf) {
+
+pdf.getPage(1).then(function(page) {
+
+const scale = 2;
+const viewport = page.getViewport({ scale: scale });
+
+const canvas = document.getElementById("pdf-canvas");
+const context = canvas.getContext("2d");
+
+canvas.height = viewport.height;
+canvas.width = viewport.width;
+
+page.render({
+canvasContext: context,
+viewport: viewport
+});
+
+});
+
+});
+
+</script>
 
 </body>
-
 </html>
